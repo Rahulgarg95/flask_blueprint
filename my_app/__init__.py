@@ -1,5 +1,14 @@
 from flask import Flask
-from my_app.product.views import product_blueprint
+from flask.ext.mongoengine import MongoEngine
+from redis import Redis
+
 
 app = Flask(__name__)
-app.register_blueprint(product_blueprint)
+app.config['MONGODB_SETTINGS'] = {'DB': 'my_catalog'}
+app.debug = True
+db = MongoEngine(app)
+
+redis = Redis()
+
+from my_app.catalog.views import catalog
+app.register_blueprint(catalog)
